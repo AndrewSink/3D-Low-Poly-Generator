@@ -29,9 +29,9 @@ Decimation Percentage: .05 = 5% of triangles removed </br>
 
 The 3D Low Poly Generator uses the Simplifymodifier.js class to reduce a mesh by a set number of triangles.
 
-Time Estimation
+## Time Estimation
 
-The implementation of a time estimate was my wife's idea, and it makes the whole project feel more complete. Here's how the estimation was created: 
+The implementation of a time estimate was my wife's idea (thanks Erica!), and it makes the whole project feel more complete. Here's how the estimation was created: 
 
 <img width="593" alt="Deci4" src="https://user-images.githubusercontent.com/46334898/143715994-83b3573f-56b7-44c1-b06a-227173771811.png">
 
