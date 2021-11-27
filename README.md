@@ -43,7 +43,7 @@ This variable is used to calculate the overall amount of time required to reduce
 >var targetTri = currentTriangles - (Math.floor((decimatePercentage* currentTriangles)))</br>
 >var time = Math.floor((decimatePercentage * currentTriangles) * .00267)</br>
 
-It's not 100% accurate, but it is able to give a good indication of the general amount of time required to process a mesh. 
+It's not 100% accurate, but it is able to give a good indication of the general amount of time required to process a mesh, as well as estimating how many triangles will be removed. 
 
 ![Deci5](https://user-images.githubusercontent.com/46334898/143718408-c1d20201-df25-4c02-a5f3-f8c25f260708.png)
 
