@@ -2,7 +2,7 @@
 
 Try it out: [3D Low Poly Generator](https://andrewsink.github.io/3D-Low-Poly-Generator/)
 
-The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own! The entire process is done in-browser using [three.js](https://threejs.org/), so there's no additional software to load or learn. Just upload a file and start experimenting!
+The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own, perfect for 3D printing! The entire process is done in-browser using [three.js](https://threejs.org/), so there's no additional software to load or learn. Just upload a file and start experimenting!
  
 
 ![Deci1](https://user-images.githubusercontent.com/46334898/143689199-513fafce-d3df-4085-8aa7-a72e982d9ad7.png)
