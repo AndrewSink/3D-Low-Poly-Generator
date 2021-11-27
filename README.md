@@ -31,11 +31,17 @@ The 3D Low Poly Generator uses the Simplifymodifier.js class to reduce a mesh by
 
 ## Time Estimation
 
-The implementation of a time estimate was my wife's idea (thanks Erica!), and it makes the whole project feel more complete. Here's how the estimation was created: 
+The implementation of a time estimate was my wife's idea (thanks Erica!), and it makes the whole project feel more complete. Because the interface becomes unresponsive during processing and there is no progress bar, the time estimation can be used to know if a mesh *should* be finished after a certain amount of time.
 
 <img width="593" alt="Deci4" src="https://user-images.githubusercontent.com/46334898/143715994-83b3573f-56b7-44c1-b06a-227173771811.png">
 
-I ran the 3D Low Poly Generator using several different models at various levels of triangle reduction, and logged the time and number of triangles reduced. It followed a roughly linear path, so I used the average of these estimations to create a seconds per triangle variable. This variable is used to calculate the overall amount of time required to reduce a mesh by a given number of triangles. </br>
+I ran the 3D Low Poly Generator using several different models at various levels of triangle reduction, and logged the time and number of triangles reduced. The average I calculated was .00267 seconds per triangle removed.</br>
+
+This variable is used to calculate the overall amount of time required to reduce a mesh by a given number of triangles. </br>
+
+>var currentTri = currentTriangles</br>
+>var targetTri = currentTriangles - (Math.floor((decimatePercentage* currentTriangles)))</br>
+>var time = Math.floor((decimatePercentage * currentTriangles) * .00267)</br>
 
 It's not 100% accurate, but it is able to give a good indication of the general amount of time required to process a mesh. 
 
