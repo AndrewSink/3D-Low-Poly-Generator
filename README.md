@@ -1,6 +1,6 @@
 # 3D Low Poly Generator / Mesh Decimation Tool
 
-Try it out: 3D Low Poly Generator
+Try it out: [3D Low Poly Generator](https://andrewsink.github.io/3D-Low-Poly-Generator/)
 
 The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own! The entire process is done in-browser, so there's no additional software to load! Just upload a file and start experimenting!
  
