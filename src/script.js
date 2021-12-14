@@ -34,6 +34,49 @@ material.side = THREE.DoubleSide;
 
 const modifier = new SimplifyModifier();
 
+const MAX_FACE_COUNT_PER_ITERATION = 250;
+
+const renderTimeout = ()=> {
+    return new Promise((resolve,reject)=>{
+        window.requestAnimationFrame(()=>{
+            resolve();
+        })
+    })
+}
+
+let modifierInProgress = false;
+let modifierProgressPercentage = 0;
+
+const iterativeModifier = async ({decimationFaceCount, geometry, updateCallback})=>{
+    modifierInProgress = true;
+    modifierProgressPercentage = 0;
+    let startingFaceCount = geometry.attributes.position.count
+    let currentFaceCount = startingFaceCount;
+    let targetFaceCount = startingFaceCount - decimationFaceCount;
+    let totalFacesToDecimate = startingFaceCount - targetFaceCount;
+    let remainingFacesToDecimate = currentFaceCount - targetFaceCount;
+
+    let iterationFaceCount = currentFaceCount - MAX_FACE_COUNT_PER_ITERATION;
+    
+    let simplifiedGeometry = geometry;
+    while(iterationFaceCount > targetFaceCount) {
+        console.log({currentFaceCount, iterationFaceCount, targetFaceCount});
+        simplifiedGeometry = modifier.modify(simplifiedGeometry, MAX_FACE_COUNT_PER_ITERATION);
+        await renderTimeout();
+        updateCallback(simplifiedGeometry)
+        await renderTimeout();
+        currentFaceCount =  simplifiedGeometry.attributes.position.count;
+        iterationFaceCount = currentFaceCount - MAX_FACE_COUNT_PER_ITERATION;
+        remainingFacesToDecimate = currentFaceCount - targetFaceCount;
+        modifierProgressPercentage = Math.floor( ((totalFacesToDecimate - remainingFacesToDecimate)/totalFacesToDecimate) * 100 );
+    }
+    
+    simplifiedGeometry = modifier.modify(simplifiedGeometry, currentFaceCount - targetFaceCount );
+    updateCallback(simplifiedGeometry)
+    modifierProgressPercentage = 100;
+    modifierInProgress = false;
+}
+
 
 const rotateControls = gui.addFolder('Rotation')
 
@@ -162,10 +205,13 @@ stlLoader.load(
                 console.clear();
                 console.time('updateScene')
                 const count = Math.floor(myMesh.geometry.attributes.position.count * decimate.amount);
-                myMesh.geometry = modifier.modify(myMesh.geometry, count)
-                scene.add(myMesh);
-                console.log('Face Count:', myMesh.geometry.attributes.position.count)
-                console.timeEnd('updateScene')
+                iterativeModifier({decimationFaceCount:count, geometry: myMesh.geometry, updateCallback: (geometry)=>{
+                    myMesh.geometry = geometry;
+                    scene.add(myMesh);
+                }}).then(()=>{
+                    console.log('Face Count:', myMesh.geometry.attributes.position.count)
+                    console.timeEnd('updateScene')
+                }).catch(error=> console.error(error))
             }
         }
 
@@ -209,12 +255,16 @@ stlLoader.load(
 
         function tick() {
             var currentTri = (Math.floor(myMesh.geometry.attributes.position.count))
-            var targetTri = myMesh.geometry.attributes.position.count - (Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count)))
             document.getElementById("currentTri").innerHTML = currentTri;
-            document.getElementById("targetTri").innerHTML = targetTri;
-
-            var time = Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count) * .00267)
-            document.getElementById("time").innerHTML = time; 
+            if(!modifierInProgress){
+                var targetTri = myMesh.geometry.attributes.position.count - (Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count)))
+                document.getElementById("targetTri").innerHTML = targetTri;
+                
+                var time = Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count) * .00267)
+                document.getElementById("time").innerHTML = time; 
+            }
+            document.getElementById("progress").innerHTML = `${modifierProgressPercentage}%`;
+            
             render()
             controls.update()
             window.requestAnimationFrame(tick)
