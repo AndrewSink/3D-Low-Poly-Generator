@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js'
 import { STLExporter } from 'three/examples/jsm/exporters/STLExporter.js'
+import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter.js'
 import { SimplifyModifier } from 'three/examples/jsm/modifiers/SimplifyModifier.js'
 import * as dat from 'lil-gui'
 
@@ -23,6 +24,10 @@ const scene = new THREE.Scene()
 
 // STLExport
 const exporter = new STLExporter();
+
+// OBJExport
+const objExporter = new OBJExporter();
+
 
 // Parameters
 const stlLoader = new STLLoader()
@@ -78,7 +83,7 @@ const iterativeModifier = async ({decimationFaceCount, geometry, updateCallback}
 }
 
 
-const rotateControls = gui.addFolder('Rotation')
+const rotateControls = gui.addFolder('Rotation', {closed: true})
 
 const rotateX = {
     RotateX: function () {
@@ -119,6 +124,7 @@ rotateControls.add(rotateZ, 'RotateZ')
 
 
 const decimateControls = gui.addFolder('Decimation')
+const exportControls = gui.addFolder('Export')
 
 
 const decimate = { amount: .25 }
@@ -238,7 +244,7 @@ stlLoader.load(
 
         const exportModel = {
             Export: function () {
-                var str = exporter.parse(myMesh);
+                var str = exporter.parse(myMesh, { binary: true } );
                 var blob = new Blob([str], { type: 'text/plain' });
                 var link = document.createElement('a');
                 link.style.display = 'none';
@@ -248,9 +254,23 @@ stlLoader.load(
                 link.click();
             }
         }
-        
+
+        const exportOBJ = {
+            Export: function () {
+                var str = objExporter.parse(myMesh);
+                var blob = new Blob([str], { type: 'text/plain' });
+                var link = document.createElement('a');
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.href = URL.createObjectURL(blob);
+                link.download = 'Model.obj';
+                link.click();
+            }
+        }
+
         decimateControls.add(resetScene, 'Reset')
-        decimateControls.add(exportModel, 'Export')
+        exportControls.add(exportModel, 'Export').name("Export STL")
+        exportControls.add(exportOBJ, 'Export').name("Export OBJ")
 
 
         function tick() {
@@ -314,5 +334,4 @@ stlLoader.load(
 
 
 console.log("Well, aren't you curious? You can see face count, processing time, and more right here in the console!")
-
 
