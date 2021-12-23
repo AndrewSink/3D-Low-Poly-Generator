@@ -47,5 +47,6 @@ It's not 100% accurate, but it is able to give a good indication of the general 
 
 ![Deci5](https://user-images.githubusercontent.com/46334898/143718408-c1d20201-df25-4c02-a5f3-f8c25f260708.png)
 
+Read more here: https://3dwithus.com/low-poly-generator-reduce-stl-file-size-and-create-art
 
 Find this project useful? You can buy me a [coffee on Ko-Fi](https://ko-fi.com/andrewsink)!
