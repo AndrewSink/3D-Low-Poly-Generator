@@ -13,8 +13,22 @@ var userUploaded = false
 // Creates empty mesh container
 const myMesh = new THREE.Mesh();
 
-// Debug
-const gui = new dat.GUI()
+// Updated GUI
+let gui = new dat.GUI()
+const rotateControls = gui.addFolder('Rotation')
+rotateControls.close()
+const decimateControls = gui.addFolder('Decimation')
+const exportControls = gui.addFolder('Export')
+
+//Should detect if user is on mobile or not
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    exportControls.close()
+    rotateControls.close()
+    gui.close()
+    var link = document.getElementById('input');
+    link.style.display = 'none';
+} else {
+}
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -41,9 +55,9 @@ const modifier = new SimplifyModifier();
 
 const MAX_FACE_COUNT_PER_ITERATION = 250;
 
-const renderTimeout = ()=> {
-    return new Promise((resolve,reject)=>{
-        window.requestAnimationFrame(()=>{
+const renderTimeout = () => {
+    return new Promise((resolve, reject) => {
+        window.requestAnimationFrame(() => {
             resolve();
         })
     })
@@ -52,7 +66,7 @@ const renderTimeout = ()=> {
 let modifierInProgress = false;
 let modifierProgressPercentage = 0;
 
-const iterativeModifier = async ({decimationFaceCount, geometry, updateCallback})=>{
+const iterativeModifier = async ({ decimationFaceCount, geometry, updateCallback }) => {
     modifierInProgress = true;
     modifierProgressPercentage = 0;
     let startingFaceCount = geometry.attributes.position.count
@@ -62,28 +76,25 @@ const iterativeModifier = async ({decimationFaceCount, geometry, updateCallback}
     let remainingFacesToDecimate = currentFaceCount - targetFaceCount;
 
     let iterationFaceCount = currentFaceCount - MAX_FACE_COUNT_PER_ITERATION;
-    
+
     let simplifiedGeometry = geometry;
-    while(iterationFaceCount > targetFaceCount) {
-        console.log({currentFaceCount, iterationFaceCount, targetFaceCount});
+    while (iterationFaceCount > targetFaceCount) {
+        console.log({ currentFaceCount, iterationFaceCount, targetFaceCount });
         simplifiedGeometry = modifier.modify(simplifiedGeometry, MAX_FACE_COUNT_PER_ITERATION);
         await renderTimeout();
         updateCallback(simplifiedGeometry)
         await renderTimeout();
-        currentFaceCount =  simplifiedGeometry.attributes.position.count;
+        currentFaceCount = simplifiedGeometry.attributes.position.count;
         iterationFaceCount = currentFaceCount - MAX_FACE_COUNT_PER_ITERATION;
         remainingFacesToDecimate = currentFaceCount - targetFaceCount;
-        modifierProgressPercentage = Math.floor( ((totalFacesToDecimate - remainingFacesToDecimate)/totalFacesToDecimate) * 100 );
+        modifierProgressPercentage = Math.floor(((totalFacesToDecimate - remainingFacesToDecimate) / totalFacesToDecimate) * 100);
     }
-    
-    simplifiedGeometry = modifier.modify(simplifiedGeometry, currentFaceCount - targetFaceCount );
+
+    simplifiedGeometry = modifier.modify(simplifiedGeometry, currentFaceCount - targetFaceCount);
     updateCallback(simplifiedGeometry)
     modifierProgressPercentage = 100;
     modifierInProgress = false;
 }
-
-
-const rotateControls = gui.addFolder('Rotation', {closed: true})
 
 const rotateX = {
     RotateX: function () {
@@ -120,12 +131,6 @@ const rotateZ = {
 }
 
 rotateControls.add(rotateZ, 'RotateZ')
-
-
-
-const decimateControls = gui.addFolder('Decimation')
-const exportControls = gui.addFolder('Export')
-
 
 const decimate = { amount: .25 }
 decimateControls.add(decimate, 'amount', .01, .50, .01).name('Decimation Percentage')
@@ -204,20 +209,22 @@ stlLoader.load(
         myMesh.geometry = modifier.modify(geometry, 0)
         console.log('Face Count:', myMesh.geometry.attributes.position.count)
 
- 
+
 
         const updateScene = {
             Update: function () {
                 console.clear();
                 console.time('updateScene')
                 const count = Math.floor(myMesh.geometry.attributes.position.count * decimate.amount);
-                iterativeModifier({decimationFaceCount:count, geometry: myMesh.geometry, updateCallback: (geometry)=>{
-                    myMesh.geometry = geometry;
-                    scene.add(myMesh);
-                }}).then(()=>{
+                iterativeModifier({
+                    decimationFaceCount: count, geometry: myMesh.geometry, updateCallback: (geometry) => {
+                        myMesh.geometry = geometry;
+                        scene.add(myMesh);
+                    }
+                }).then(() => {
                     console.log('Face Count:', myMesh.geometry.attributes.position.count)
                     console.timeEnd('updateScene')
-                }).catch(error=> console.error(error))
+                }).catch(error => console.error(error))
             }
         }
 
@@ -231,20 +238,20 @@ stlLoader.load(
                     myMesh.geometry = modifier.modify(geometry, 0)
                     console.log('Face Count:', myMesh.geometry.attributes.position.count)
                     scene.add(myMesh);
-                  } else if (userUploaded == true) {
+                } else if (userUploaded == true) {
                     geometry = tempGeometry
                     myMesh.geometry = geometry;
                     myMesh.geometry = modifier.modify(geometry, 0)
                     console.log('Face Count:', myMesh.geometry.attributes.position.count)
 
-                  }
+                }
 
             }
         }
 
         const exportModel = {
             Export: function () {
-                var str = exporter.parse(myMesh, { binary: true } );
+                var str = exporter.parse(myMesh, { binary: true });
                 var blob = new Blob([str], { type: 'text/plain' });
                 var link = document.createElement('a');
                 link.style.display = 'none';
@@ -276,15 +283,15 @@ stlLoader.load(
         function tick() {
             var currentTri = (Math.floor(myMesh.geometry.attributes.position.count))
             document.getElementById("currentTri").innerHTML = currentTri;
-            if(!modifierInProgress){
-                var targetTri = myMesh.geometry.attributes.position.count - (Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count)))
+            if (!modifierInProgress) {
+                var targetTri = myMesh.geometry.attributes.position.count - (Math.floor((decimate.amount * myMesh.geometry.attributes.position.count)))
                 document.getElementById("targetTri").innerHTML = targetTri;
-                
-                var time = Math.floor(( decimate.amount * myMesh.geometry.attributes.position.count) * .00267)
-                document.getElementById("time").innerHTML = time; 
+
+                var time = Math.floor((decimate.amount * myMesh.geometry.attributes.position.count) * .00267)
+                document.getElementById("time").innerHTML = time;
             }
             document.getElementById("progress").innerHTML = `${modifierProgressPercentage}%`;
-            
+
             render()
             controls.update()
             window.requestAnimationFrame(tick)
@@ -297,30 +304,29 @@ stlLoader.load(
         tick()
 
         document.getElementById('file-selector').addEventListener('change', openFile, false);
-        
-        function openFile (evt) {
+
+        function openFile(evt) {
             console.clear();
             const fileObject = evt.target.files[0];
-        
+
             const reader = new FileReader();
-            reader.readAsArrayBuffer(fileObject) ;
-            reader.onload = function ()
-            {
+            reader.readAsArrayBuffer(fileObject);
+            reader.onload = function () {
                 if (userUploaded == false) {
                     userUploaded = true;
-                  }
+                }
                 const geometry = stlLoader.parse(this.result);
                 tempGeometry = geometry;
                 myMesh.geometry = geometry;
                 myMesh.geometry.center()
-        
+
                 myMesh.rotation.x = -90 * Math.PI / 180;
-        
+
                 myMesh.geometry.computeBoundingBox();
                 var bbox = myMesh.geometry.boundingBox;
-        
+
                 myMesh.position.y = ((bbox.max.z - bbox.min.z) / 2)
-        
+
                 camera.position.x = ((bbox.max.x * 3));
                 camera.position.y = ((bbox.max.y * 3));
                 camera.position.z = ((bbox.max.z * 3));
