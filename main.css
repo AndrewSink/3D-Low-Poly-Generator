@@ -1,3 +1,5 @@
+/* V1.2.0 */
+
 *
 {
     margin: 0;
@@ -35,6 +37,14 @@ form {
     position: fixed;
     left: 0;
     bottom: 0;
+}
+
+#dropDown{
+          margin: 10px;
+}
+
+#input{
+      margin: 10px;
 }
 
 
