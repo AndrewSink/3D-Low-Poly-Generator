@@ -14,7 +14,7 @@ The 'Triangle Reduction %' slider will adjust the overall amount of decimation. 
 
 Example: </br>
 Triangle Reduction 30%: 30% of triangles removed </br>
-Triangle Reduction 5% = 5% of triangles removed </br>
+Triangle Reduction 5%: 5% of triangles removed </br>
 
 ### Commands
 
