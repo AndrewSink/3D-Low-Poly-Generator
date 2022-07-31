@@ -2,6 +2,8 @@
 
 Try it out: [3D Low Poly Generator](https://lowpoly3d.xyz/)
 
+Find this project useful? You can buy me a [coffee on Ko-Fi](https://ko-fi.com/andrewsink)!
+
 The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own, perfect for 3D printing! The entire process is done in-browser using [three.js](https://threejs.org/), so there's no additional software to load or learn. Just upload a file and start experimenting!
 
 <img width="640" alt="hi1" src="https://user-images.githubusercontent.com/46334898/182034633-92e4ebee-e0a1-4978-a8f4-6004796d1ea6.png">
@@ -46,5 +48,3 @@ It's not 100% accurate, but it is able to give a good indication of the general 
 <img width="640" alt="Triangle_Count" src="https://user-images.githubusercontent.com/46334898/182034572-620d1370-0a94-408a-99e3-04d2ef81acfb.png">
 
 Read more here: https://3dwithus.com/low-poly-generator-reduce-stl-file-size-and-create-art
-
-Find this project useful? You can buy me a [coffee on Ko-Fi](https://ko-fi.com/andrewsink)!
