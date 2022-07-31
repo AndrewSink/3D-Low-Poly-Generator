@@ -3,27 +3,25 @@
 Try it out: [3D Low Poly Generator](https://lowpoly3d.xyz/)
 
 The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own, perfect for 3D printing! The entire process is done in-browser using [three.js](https://threejs.org/), so there's no additional software to load or learn. Just upload a file and start experimenting!
- 
 
-![Deci1](https://user-images.githubusercontent.com/46334898/143689199-513fafce-d3df-4085-8aa7-a72e982d9ad7.png)
-![Deci2](https://user-images.githubusercontent.com/46334898/143689202-84e027f4-3f22-4360-8087-ced2e5762f79.png)
-
-
+<img width="640" alt="hi1" src="https://user-images.githubusercontent.com/46334898/182034633-92e4ebee-e0a1-4978-a8f4-6004796d1ea6.png">
+<img width="640" alt="hi2" src="https://user-images.githubusercontent.com/46334898/182034638-24c66db0-d536-4ec3-bffb-9e5d37788038.png">
 
 
 ## Usage
 
-The 'Decimation Percentage' variable will adjust the overall amount of decimation. A higher number will result in a high number of triangles removed.
+The 'Triangle Reduction %' slider will adjust the overall amount of decimation. A higher number will result in a higher number of triangles removed.
 
 Example: </br>
-Decimation Percentage: .3 = 30% of triangles removed </br>
-Decimation Percentage: .05 = 5% of triangles removed </br>
+Triangle Reduction 30%: 30% of triangles removed </br>
+Triangle Reduction 5%: 5% of triangles removed </br>
 
 ### Commands
 
-**Update:** Updates current mesh with requested triangle reduction </br>
+**Decimate:** Updates current mesh with requested triangle reduction </br>
 **Reset:** Resets current mesh to original triangle count </br>
-**Export:** Exports an .STL with the current triangle count </br>
+**Export STL:** Exports an .stl with the current triangle count </br>
+**Export OBJ:** Exports an .obj with the current triangle count </br>
 
 ## How it works
 
@@ -45,7 +43,7 @@ This variable is used to calculate the overall amount of time required to reduce
 
 It's not 100% accurate, but it is able to give a good indication of the general amount of time required to process a mesh, as well as estimating how many triangles will be removed. 
 
-![Deci5](https://user-images.githubusercontent.com/46334898/143718408-c1d20201-df25-4c02-a5f3-f8c25f260708.png)
+<img width="640" alt="Triangle_Count" src="https://user-images.githubusercontent.com/46334898/182034572-620d1370-0a94-408a-99e3-04d2ef81acfb.png">
 
 Read more here: https://3dwithus.com/low-poly-generator-reduce-stl-file-size-and-create-art
 
