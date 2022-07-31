@@ -1,0 +1,26 @@
+{
+  "title": "Mini CSS Extract Plugin Loader options",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "publicPath": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "instanceof": "Function"
+        }
+      ]
+    },
+    "emit": {
+      "type": "boolean"
+    },
+    "esModule": {
+      "type": "boolean"
+    },
+    "layer": {
+      "type": "string"
+    }
+  }
+}
