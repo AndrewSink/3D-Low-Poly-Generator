@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!--V1.2.3-->
+    <!--V2.0.0-->
 
     <head>
         <meta charset="UTF-8">
@@ -26,8 +26,7 @@
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/GLTFExporter.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/modifiers/SimplifyModifier.js"></script>
 
-        <!-- lil-gui CDN -->
-        <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.19.2/dist/lil-gui.umd.min.js"></script>
+        <!-- lil-gui removed - using custom sidebar controls -->
 
         <!-- CSS -->
         <link rel="stylesheet" href="style.css">
@@ -35,41 +34,137 @@
 
     <body>
         <canvas class="webgl"></canvas>
-        <form method="post" enctype="multipart/form-data">
-            <div id="dropDown">
-                <label for="defaults">Default models:</label>
-                <br>
-                <select name="defaults" id="defaults">
-                    <option disabled selected value> -- Select a model -- </option>
-                    <option id="sculpture" value="sculpture">Sculpture</option>
-                    <option id="bunny" value="bunny">Bunny</option>
-                    <option id="frog" value="frog">Frog</option>
-                    <option id="scan" value="scan">Scan</option>
-                </select>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Mobile Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Modern Sidebar -->
+        <div id="sidebar" class="sidebar-closed">
+            <div class="sidebar-header">
+                <h1>3D Low Poly Generator</h1>
+                <p class="author"><a href="https://andrewsink.xyz" target="_blank">Andrew Sink - 2025</a></p>
+                <p class="version"><a href="https://github.com/AndrewSink/3D-Low-Poly-Generator"
+                        target="_blank">v2.0.0</a></p>
             </div>
-            <div id="input">
-                <label for="file-selector">Choose .STL file</label>
-                <br>
-                <input type="file" id="file-selector" name="userModel" accept=".stl">
+
+            <!-- Model Selection Section -->
+            <div class="sidebar-section">
+                <h3>Model Selection</h3>
+                <div class="control-group">
+                    <label for="defaults">Default Models</label>
+                    <select name="defaults" id="defaults" class="modern-select">
+                        <option disabled selected value>Select a model</option>
+                        <option id="sculpture" value="sculpture">Sculpture</option>
+                        <option id="bunny" value="bunny">Bunny</option>
+                        <option id="frog" value="frog">Frog</option>
+                        <option id="scan" value="scan">Scan</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="file-selector">Upload STL File</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="file-selector" name="userModel" accept=".stl" class="file-input">
+                        <button type="button" class="file-button"
+                            onclick="document.getElementById('file-selector').click()">
+                            Choose File
+                        </button>
+                        <span class="file-name" id="file-name">No file selected</span>
+                    </div>
+                </div>
             </div>
-            <div id="kofi">
-                <p>Current Triangle Count: <span id="currentTri"></span></p>
-                <p>Target Triangle Count: <span id="targetTri"></span></p>
-                <p>Estimated Processing Time: <span id="time"></span> Seconds</p>
-                <p>Progress: <span id="progress"></span></p>
-                <br>
-                <p style="font-family:'Courier New'">3D Low Poly Generator</p>
-                <p style="font-family:'Courier New'">Andrew Sink - 2025</p>
-                <p style="font-size: 13px; font-family:'Courier New'">Full Code Available on <a
-                        href="https://github.com/AndrewSink/3D-Low-Poly-Generator/">Github</a></p>
-                <a href="https://twitter.com/andrewasink?ref_src=twsrc%5Etfw" class="twitter-follow-button"
-                    data-show-count="false">Follow @andrewasink</a>
-                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><br>
-                <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-                <script
-                    type='text/javascript'>kofiwidget2.init('Want to buy me a coffee?', '#29abe0', 'A0A35L8LW'); kofiwidget2.draw();</script>
+
+            <!-- Model Info Section -->
+            <div class="sidebar-section">
+                <h3>Model Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Current Triangles</span>
+                        <span class="info-value" id="currentTri">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Target Triangles</span>
+                        <span class="info-value" id="targetTri">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Processing Time</span>
+                        <span class="info-value" id="time">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Progress</span>
+                        <span class="info-value" id="progress">0%</span>
+                    </div>
+                </div>
             </div>
-        </form>
+
+            <!-- Decimation Controls -->
+            <div class="sidebar-section">
+                <h3>Decimation</h3>
+                <div class="control-group">
+                    <label for="decimate-slider">Triangle Reduction %</label>
+                    <div class="slider-wrapper">
+                        <input type="range" id="decimate-slider" min="1" max="50" value="25" class="modern-slider">
+                        <span class="slider-value" id="decimate-value">25%</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button id="decimate-btn" class="btn btn-primary">Decimate</button>
+                    <button id="reset-btn" class="btn btn-secondary">Reset</button>
+                </div>
+            </div>
+
+            <!-- Export Controls -->
+            <div class="sidebar-section">
+                <h3>Export</h3>
+                <div class="button-group">
+                    <button id="export-stl-btn" class="btn btn-success">Export STL</button>
+                    <button id="export-obj-btn" class="btn btn-success">Export OBJ</button>
+                </div>
+            </div>
+
+            <!-- Rotation Controls -->
+            <div class="sidebar-section">
+                <h3>Rotation</h3>
+                <div class="button-group rotation-buttons">
+                    <button id="rotate-x-btn" class="btn btn-outline">Rotate X</button>
+                    <button id="rotate-y-btn" class="btn btn-outline">Rotate Y</button>
+                    <button id="rotate-z-btn" class="btn btn-outline">Rotate Z</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="sidebar-footer">
+                <!-- Footer is now empty - Ko-fi moved to bottom right -->
+            </div>
+        </div>
+
+        <!-- Amazon Affiliate Widget -->
+        <div class="amazon-widget">
+            <a href="https://amzn.to/42aL4ow" target="_blank" rel="noopener sponsored">
+                <div class="affiliate-card">
+                    <div class="affiliate-header">
+                        <span class="affiliate-label">Amazon Affiliate</span>
+                    </div>
+                    <div class="affiliate-content">
+                        <div class="color-icon">🎨</div>
+                        <div class="affiliate-text">
+                            <h4>Tri-Color RGB PLA Filament</h4>
+                            <p>Add RGB color normal mapping to your 3D prints!</p>
+                            <span class="affiliate-cta">View on Amazon →</span>
+                        </div>
+                    </div>
+                    <div class="affiliate-footer">
+                        <small>As an Amazon Associate we earn from qualifying purchases</small>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         <!-- Main script -->
         <script src="script.js"></script>
