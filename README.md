@@ -6,8 +6,8 @@ Find this project useful? You can buy me a [coffee on Ko-Fi](https://ko-fi.com/a
 
 The 3D Low Poly Generator lets you import an .STL file and create a low poly masterpiece of your own, perfect for 3D printing! The entire process is done in-browser using [three.js](https://threejs.org/), so there's no additional software to load or learn. Just upload a file and start experimenting!
 
-<img width="640" alt="hi1" src="https://user-images.githubusercontent.com/46334898/182034633-92e4ebee-e0a1-4978-a8f4-6004796d1ea6.png">
-<img width="640" alt="hi2" src="https://user-images.githubusercontent.com/46334898/182034638-24c66db0-d536-4ec3-bffb-9e5d37788038.png">
+<img width="640" alt="1" src="https://github.com/user-attachments/assets/23d33acf-0c1f-4f58-9291-5f2394df23f6" />
+<img width="640" alt="2" src="https://github.com/user-attachments/assets/b1e5f1b4-f2bd-4b3f-948d-4ca59a9ddf1e" />
 
 
 ## Usage
@@ -45,6 +45,6 @@ This variable is used to calculate the overall amount of time required to reduce
 
 It's not 100% accurate, but it is able to give a good indication of the general amount of time required to process a mesh, as well as estimating how many triangles will be removed. 
 
-<img width="640" alt="Triangle_Count" src="https://user-images.githubusercontent.com/46334898/182034572-620d1370-0a94-408a-99e3-04d2ef81acfb.png">
+<img width="292" height="221" alt="3" src="https://github.com/user-attachments/assets/74fff688-c3c9-40bf-b5f0-cc72f2cfabf7" />
 
 Read more here: https://3dwithus.com/low-poly-generator-reduce-stl-file-size-and-create-art
