@@ -1,19 +1,17 @@
 /* V1.2.2 */
 
-*
-{
+* {
     margin: 0;
     padding: 0;
 }
+
 html,
-body
-{
+body {
     overflow: hidden;
     background-color: black;
 }
 
-.webgl
-{
+.webgl {
     position: fixed;
     top: 0;
     left: 0;
@@ -28,7 +26,7 @@ form {
     /* z-index: 99; */
     left: 0%;
     top: 0%;
-    }
+}
 
 #kofi {
     position: fixed;
@@ -36,12 +34,10 @@ form {
     bottom: 0;
 }
 
-#dropDown{
-          margin: 10px;
+#dropDown {
+    margin: 10px;
 }
 
-#input{
-      margin: 10px;
+#input {
+    margin: 10px;
 }
-
-
