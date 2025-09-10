@@ -400,6 +400,11 @@ window.addEventListener('load', function () {
     // Controls
     const controls = new THREE.OrbitControls(camera, canvas)
     controls.enableDamping = true
+    controls.mouseButtons = {
+        LEFT: THREE.MOUSE.ROTATE,
+        MIDDLE: THREE.MOUSE.PAN,
+        RIGHT: THREE.MOUSE.ROTATE
+    }
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
